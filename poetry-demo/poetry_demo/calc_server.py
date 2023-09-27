@@ -9,6 +9,7 @@ from nats.aio.errors import ErrConnectionClosed, ErrTimeout
 import asyncio
 from argparse import ArgumentParser
 from nats.aio.client import Client as NATS
+import parser
 
 class Calc:
     def __init__(self):
