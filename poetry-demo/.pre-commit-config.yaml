@@ -1,0 +1,53 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: end-of-file-fixer # Ensures that a file is either empty, or ends with one newline.
+      - id: check-ast # Simply check whether the files parse as valid python
+      - id: check-toml # This hook checks toml files for parseable syntax.
+      - id: check-yaml # This hook checks yaml files for parseable syntax.
+      - id: check-added-large-files # Prevent giant files from being committed (500kB)
+      - id: check-merge-conflict # Check for files that contain merge conflict strings.
+      - id: detect-private-key # Detects the presence of private keys
+      - id: debug-statements # Check for debugger imports and py37+ `breakpoint()` calls in python source.
+      - id: name-tests-test    
+
+-   repo: https://github.com/codespell-project/codespell
+    rev: 'v2.2.5'
+    hooks:
+      - id: codespell
+
+
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: 'v1.4.1'
+    hooks:
+      - id: mypy
+        additional_dependencies: [types-all]
+        args: [--ignore-missing-imports, --implicit-reexport]
+
+-   repo: https://github.com/psf/black
+    rev: 23.3.0
+    hooks:
+      - id: black
+        exclude: ^dist/
+        args:
+          - --line-length=170
+
+-   repo: https://github.com/PyCQA/autoflake
+    rev: v2.2.0
+    hooks:
+    -   id: autoflake
+
+-   repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+     - id: isort
+       name: isort (python)
+
+
+- repo: https://github.com/charliermarsh/ruff-pre-commit
+  # Ruff version.
+  rev: "v0.0.275"
+  hooks:
+    - id: ruff
+      args: [--fix, --exit-non-zero-on-fix, --line-length=170]
