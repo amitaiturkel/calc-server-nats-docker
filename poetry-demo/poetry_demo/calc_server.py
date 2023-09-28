@@ -1,15 +1,16 @@
+from http.client import HTTPException
+import os
 from typing import Annotated, Dict
 import asyncio
 import json
 from nats.aio.client import Client as NATS
+
 import asyncio
 import json
 from nats.aio.client import Client as NATS
 from nats.aio.errors import ErrConnectionClosed, ErrTimeout
 import asyncio
 from argparse import ArgumentParser
-from nats.aio.client import Client as NATS
-import parser
 
 class Calc:
     def __init__(self):
@@ -93,19 +94,21 @@ async def handle_message(msg):
         # Handle the error 
         print(f"Error publishing message: {str(e)}")
 
-async def start_server():
-    await nc.connect("nats://localhost:4222")
+async def start_server(nats_port):
+    await nc.connect(f"nats://{nats_server_address}:{nats_port}")  # Updated connection to use environment variable
     await nc.subscribe("calc", cb=handle_message)
 
 ######### running the NATS server ########
 if __name__ == "__main__":
-    arser = ArgumentParser(description="NATS Server")
+    parser = ArgumentParser(description="NATS Server")
     parser.add_argument("--nats-port", type=int, default=4222, help="NATS server port")
 
     args = parser.parse_args()
 
     nc = NATS()
     loop = asyncio.get_event_loop()
+       # Read the NATS server address from the environment variable
+    nats_server_address = os.environ.get("NATS_SERVER_ADDRESS", "localhost")
 
     try:
         loop.run_until_complete(start_server(args.nats_port))
